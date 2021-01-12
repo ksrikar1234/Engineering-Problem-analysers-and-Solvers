@@ -1,0 +1,191 @@
+## Copyright (C) 2021 Srikar Kadiyam
+## 
+## This content is free notes: you can redistribute it and/or modify it
+## under the terms of the Creative Commons License as published by
+## the Free Software Foundation, either version  of the License, or
+## (at your option) any later version.
+## 
+## This program is distributed in the hope that it will be useful, but
+## WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## Creative Commons License for more details.
+## 
+## You should have received a copy of the Creative Commons License
+## along with this program.  If not, see
+## <https://www.gnu.org/licenses/>.
+
+## -*- texinfo -*- 
+## @deftypefn {} {@var{retval} =} fit_on_line(@var{input1}, @var{input2})
+##
+## @seealso{}
+## @end deftypefn
+
+## Author: Srikar Kadiyam <kadiyamsrikarej200@gmail.com>
+## Created: 2021-01-06
+
+MA 261 notes
+1. Fitting a straight line , second degree parabola
+   and exponential curves using least squares method 
+
+   Methods of dealing with problems related to above topics
+ 
+ 1. For fitting data on a curve
+    Step 1 : Accquire the data of [ x , y ]as two arrays x = [...] , y = [...]
+    
+    Step 2 : By using Fitting least squares method 
+           +--------------------------------------------------------------+ 
+           |  [A].Fitting Data on line                                    |
+           +--------------------------------------------------------------+ 
+           |    1.Find sum(x) , sum(y), sum(x^2) , sum(xy)                |
+           |--------------------------------------------------------------+
+           |    2.Find the normal equations which are                     |
+           |      sum(y)  = n*a + b*sum(x)           ---->(1)             |
+           |      sum(xy) = a*sum(x) + b*sum(x^2)    ---->(2)             |
+           |--------------------------------------------------------------|
+           |    3.Solving (1) & (2) which gives the required line         |
+           |       y = a*x + b;                                           |
+           +--------------------------------------------------------------+
+     Octave/MatLab Code Example; ## From our presentation 1 of MA 261
+ +----------------------------------------------------------------------------------------------------+
+ Example 1 : Find the best value of a and b so that y = a + b*x fits the data given below table
+ |--------------------------------------------------
+ |   x   |   0   |   1   |    2   |   3    |   4   |  
+ ---------------------------------------------------
+ |   y   |  1.0  |  2.9  |   4.8  |   6.7  |  8.6  |
+ ---------------------------------------------------
++------------------------------------------------------------------------------------------------------+
+## MatLab/Octave language solving scipt code           
+## you need to load the Symbolic Package from forge or download it
+
+pkg load symbolic
+
+## change the below data for a different problems
+
+x = [0,     1,   2,    3,    4 ];
+y = [111.0,  2.9, 4.8 , 6.7,  8.6];
+
+## End of data accquisition 
+ 
+syms  a  b  n   x_sum    y_sum    x_sq_sum    x_y_sum
+ 
+normal_eqs = [ y_sum == n*a + b*x_sum ; x_y_sum == a*x_sum + b*x_sq_sum ]; 
+
+x_sum = vpa(sum(x));
+
+min_max = vpa(size(x));
+
+n = vpa(min_max(2));
+
+x_sum = vpa(sum(x));
+
+y_sum = vpa(sum(y));
+
+x_sq = vpa(x.^2);
+
+x_sq_sum = vpa(sum(x_sq));
+
+x_y = vpa(x.*y);
+
+x_y_sum = vpa(sum(x_y));
+
+i_eq =  eval(normal_eqs);
+                                                                                  
+m = vpasolve(i_eq , [a,b]);                                                      
+                                                                                 
+                                                                                
+i = m(1);                                                                        
+j = m(2);                                                                                   
+                                                                                 
+disp("a = " )                                                                    
+disp(i)                                                                          
+disp("b = ")                                                                      
+disp(j)                                                                          
++--------------------------------------------------------------------------------+
+
+   
+           +----------------------------------------------------------------------------+ 
+           |  [B].Fitting Data on parabola                                              |
+           +----------------------------------------------------------------------------+ 
+           |    1.Find sum(x)       , sum(y)   , sum(x^2) , sum(xy), sum(x^3)           |
+           |           sum((x^2)*y) , sum(x^4)                                          |
+           |----------------------------------------------------------------------------+
+           |    2.Find the normal equations which are                                   |
+           |      sum(y)        = n*a        +   b*sum(x)    +  x*sum(x^2   ---->(1)    |
+           |      sum(xy)       = a*sum(x)   +   b*sum(x^2)  +  c*sum(x^3)  ---->(2)    |
+           |      sum((x^2)*y)  = a*sum(x^2) +   b*sum(x^3)  +  c*sum(x^4)  ---->(3)    |
+           |----------------------------------------------------------------------------|
+           |    3.Solving (1) & (2) which gives the required line                       |
+           |       y = a + b*x + c*(x^2);                                               |
+           +----------------------------------------------------------------------------+
+     Octave/MatLab Code Example; ## From our presentation 1 of MA 261
+ +----------------------------------------------------------------------------------------------------+
+ Example 1 : Find the best value of a and b so that y = a + b*x fits the data given below table
+ |--------------------------------------------------
+ |   x   |   0   |   1   |    2   |   3    |   4   |  
+ ---------------------------------------------------
+ |   y   |  1.0  |  2.9  |   4.8  |   6.7  |  8.6  |
+ ---------------------------------------------------
++-----------------------------------------------------------------------------------------------------+
+## MatLab/Octave language solving scipt code           
+## you need to load the Symbolic Package from forge or download it
+
+pkg load symbolic
+
+## change the below data for a different problems
+
+x = [  0,   1,  2,   3,   4  ];
+y = [  -4, -1,  4,  11,  20  ];
+
+## End of data accquisition 
+ 
+syms  a  b  n   x_sum    y_sum    x_sq_sum   x_cube_sum  x_power4_sum  x_y_sum  x_sq_y_sum
+ 
+normal_eqs = [ y_sum == n*a + b*x_sum + c*x_sq_sum ; x_y_sum == a*x_sum + b*x_sq_sum + c*x_cube_sum; x_sq_y_sum == a*x_sq_sum + b*x_cube_sum + c*x_power4_sum ]; 
+
+
+min_max = vpa(size(x));
+
+n = vpa(min_max(2));
+
+x_sum = vpa(sum(x));
+
+y_sum = vpa(sum(y));
+
+x_sq = vpa(x.^2);
+
+x_sq_sum = vpa(sum(x_sq));
+
+x_3 = vpa(x.^3);
+
+x_cube_sum = vpa(sum(x_3));
+
+x_4  = vpa(x.^4);
+
+x_power4_sum = vpa(sum(x_4));
+
+x_y = vpa(x.*y);
+
+x_y_sum = vpa(sum(x_y));
+
+x_x_y = vpa(x*x*y);
+
+x_sq_y_sum = vpa(sum(x_x_y));
+
+x_sq_y_sum = vpa(sum(x_x_y));
+
+i_eq =  eval(normal_eqs);
+
+m = vpasolve(i_eq , [a,b,c]);
+
+
+i = m(1);
+j = m(2);
+k = m(3);
+disp("a = ") 
+disp(i)
+disp("b = ") 
+disp(j)
+disp("c = ")
+disp(j)
+
+
