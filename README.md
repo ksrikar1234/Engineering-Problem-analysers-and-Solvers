@@ -1,2 +1,9 @@
 # Engineering-Problem-analysers-and-Solvers
-Octave/MatLab script files and text documents for automated problem solving 
+Octave script files and text documents for automated problem solving.
+
+### Requirements
+1.' GNU Octave 4.2 minimum '
+2.'  Symbolic Package '
+
+### Usage 
+Use them directly as functions by importing them to your working directory
